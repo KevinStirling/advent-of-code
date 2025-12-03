@@ -5,26 +5,17 @@ function ParseRotation(r)
     dir = string.lower(str)
   end
   for d in string.gmatch(r, "%d%d?") do
-    num = d
+    num = tonumber(d)
   end
-  return dir, tonumber(num)
+  return dir, num
 end
 
 function SpinDial(pos, dir, clicks)
   if dir == "l" then
-    -- if clicks > pos then
-    if pos - clicks < 0 then
-      pos = 100 + (pos - clicks)
-    else
-      pos = pos - clicks
-    end
+    pos = (pos - clicks) % 100
   end
   if dir == "r" then
-    if pos + clicks > 99 then
-      pos = (pos + clicks) - 100
-    else
-      pos = pos + clicks
-    end
+    pos = (pos + clicks) % 100
   end
   return pos
 end
