@@ -1,15 +1,17 @@
+-- given a rotation in the sequece returns the direction and number seperately
 function ParseRotation(r)
   local dir
   local num
   for str in string.gmatch(r, "%a") do
     dir = string.lower(str)
   end
-  for d in string.gmatch(r, "%d%d?") do
+  for d in string.gmatch(r, "%d+") do
     num = tonumber(d)
   end
   return dir, num
 end
 
+-- given a starting position, direction, and clicks, returns the new postion
 function SpinDial(pos, dir, clicks)
   if dir == "l" then
     pos = (pos - clicks) % 100
@@ -20,12 +22,13 @@ function SpinDial(pos, dir, clicks)
   return pos
 end
 
+-- handles parsing a sequence input and spinning the dial for a sequence table. returns password
 function Input(pos, sequence)
   local zero_cnt = 0
   for _, v in pairs(sequence) do
     local dir, num = ParseRotation(v)
     pos = SpinDial(pos, dir, num)
-    -- print(pos)
+    print(pos)
     if pos == 0 then
       zero_cnt = zero_cnt + 1
     end
@@ -41,13 +44,12 @@ function GetPassword()
 end
 
 function GetPwFromFile()
-  local f = io.open("input.txt", "r")
+  local f = io.open("inputs/day1-1.txt", "r")
   if not f then return nil end
   local inputs = {}
   for line in f:lines() do
     table.insert(inputs, line)
   end
-  print(table.maxn(inputs))
   local code = Input(50, inputs)
   print(code)
 end
